@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vf7p4x!bjx61nqu=#60%n1^2$604&-&07uig^aucqj*2uhm8oi'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-vf7p4x!bjx61nqu=#60%n1^2$604&-&07uig^aucqj*2uhm8oi')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
 
 # Application definition
@@ -60,6 +64,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -116,17 +121,38 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Static files directories for development
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Static files root for production (when using collectstatic)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Static files
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+
+# ==========================================
+# CUSTOM SETTINGS FOR AI STORY GENERATOR
+# ==========================================
+
+# UI Mode Selection
+# Set to "high" for homeUIUX.html/resultUIUX.html with advanced CSS
+# Set to "base" for home.html/result.html with basic styling
+UI_MODE = os.getenv("UI_MODE", "high").lower()
+
+# Perplexity API Configuration
+PERPLEXITY_API_KEY = os.getenv("PERPLEXITY_API_KEY")
+
+# You can add more custom settings here as needed
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # If you plan to use OpenAI
+# HUGGINGFACE_API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")  # If you plan to use HuggingFace
