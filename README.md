@@ -47,19 +47,16 @@ Enter a creative story prompt (e.g., "A lonely astronaut discovers a secret gard
 
 Wait for the results — you'll get:
 
-2–3 paragraph AI-generated story
-
-Character description + image
-
-Background description + image
+ """ 2–3 paragraph AI-generated story,Character description + image,Background description + image """
 
 Switch between UI modes (see below).
 
-UI Modes
-Mode	Templates Used	Description
-High-Level UI/UX	mainapp/homeUIUX.html, mainapp/resultUIUX.html, mainapp/baseUIUX.html, static/css/style.css	Modern design with animations, gradients, and advanced CSS styling.
-Low-Level UI	mainapp/home.html, mainapp/result.html, mainapp/base.html	Minimal, fast-loading templates for quick testing and debugging.
+| Mode                | Files Used                                                          | Description                                                                 |
+|---------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| **High-Level UI/UX** | `homeUIUX.html`, `resultUIUX.html`, `baseUIUX.html`, `style.css`     | Modern design with animations, gradients, and advanced CSS styling.        |
+| **Low-Level UI**     | `home.html`, `result.html`, `base.html`                             | Minimal, fast-loading templates for quick testing and debugging.           |
 
+---
 
 Switching UI Modes
 
