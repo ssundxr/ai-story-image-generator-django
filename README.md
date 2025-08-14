@@ -106,5 +106,5 @@ setup instructions:
 
  **** Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging. ****
 
-HERE ARE SOME SAMPLE SCREEN SHOTS THAT RAN ON LOCAL HOST
+
 
