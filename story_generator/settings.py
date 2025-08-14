@@ -87,18 +87,24 @@ WSGI_APPLICATION = 'story_generator.wsgi.application'
 # PostgreSQL on Render (production) or SQLite (development)
 # Database configuration - Production ready for Render
 # Database configuration
-if os.getenv('DATABASE_URL'):
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
-    }
-else:
+# Database configuration - Build-safe for Render
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+# Use SQLite during build process or development
+if not DATABASE_URL or os.getenv('BUILD_MODE') == 'true':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+else:
+    # Production database (Render PostgreSQL)
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
+    }
+
 
 
 
