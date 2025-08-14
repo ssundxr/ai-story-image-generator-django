@@ -77,7 +77,19 @@ def result(request):
         return render(request, "mainapp/resultUIUX.html")
     return render(request, "mainapp/result.html")
 ```
+setup instructions:
+## 🔑 API Key Setup
 
+1. **Get a Perplexity API key:**
+   - Sign up at [Perplexity.ai](https://www.perplexity.ai/)
+   - Go to Settings → API Keys
+   - Generate a new API key
+
+2. **Create your environment file:**
+ ```cp .env.example .env```
+
+3. **Add your API key to `.env`:**
+```PERPLEXITY_API_KEY=your_actual_api_key_here```
 
  **** Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging. ****
 
