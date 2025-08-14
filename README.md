@@ -93,6 +93,7 @@ setup instructions:
 
  **** Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging. ****
 
+<img width="2870" height="1780" alt="Screenshot 2025-08-14 215943" src="https://github.com/user-attachments/assets/b33418bb-bb0e-4a89-8cdf-6b79773533a8" />
 
 
 
