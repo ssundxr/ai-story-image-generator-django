@@ -85,28 +85,20 @@ WSGI_APPLICATION = 'story_generator.wsgi.application'
 
 # Database configuration
 # PostgreSQL on Render (production) or SQLite (development)
-# Database configuration - Production ready for Render
-# Database configuration
-# Database configuration - Build-safe for Render
-DATABASE_URL = os.getenv('DATABASE_URL')
-
-# Use SQLite during build process or development
-if not DATABASE_URL or os.getenv('BUILD_MODE') == 'true':
+if os.getenv('DATABASE_URL'):
+    # Production database (Render PostgreSQL)
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'))
+    }
+else:
+    # Development database (SQLite)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-else:
-    # Production database (Render PostgreSQL)
-    import dj_database_url
-    DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
-    }
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -271,3 +263,4 @@ if not DEBUG:
 else:
     # Development email backend
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
