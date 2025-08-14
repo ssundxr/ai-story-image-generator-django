@@ -1,20 +1,18 @@
 # AI Story + Image Generator (Django)
 
-This project generates AI-powered **stories** and **images** based on text prompts, character descriptions, and background details.  
-It comes with **two UI modes**:
-
-| Mode                | Files Used                                                          | Description                                                                 |
-|---------------------|---------------------------------------------------------------------|-----------------------------------------------------------------------------|
-| **High-Level UI/UX** | `homeUIUX.html`, `resultUIUX.html`, `baseUIUX.html`, `style.css`     | Modern design with animations, gradients, and advanced CSS styling.        |
-| **Low-Level UI**     | `home.html`, `result.html`, `base.html`                             | Minimal, fast-loading templates for quick testing and debugging.           |
+✨ **Features**
+- **AI-powered Storytelling** — Generates a 2–3 paragraph creative story from your prompt using the **Perplexity API**.
+- **Character & Background Descriptions** — Extracts rich details for image generation.
+- **Image Generation** — Uses **Pollinations AI** to generate relevant character and background visuals.
+- **Two UI Options** — Switch between a high-end polished UI and a lightweight basic layout.
+- **Fast & Responsive** — Works well across desktop and mobile.
+- **Error Handling** — Graceful fallbacks in case of API or image generation issues.
 
 ---
 
-## 🖥 Switching UI Modes
+## 🚀 Installation & Setup
 
-You can easily toggle between UI modes without rewriting code.  
-In `settings.py`, add:
-
-```python
-# settings.py
-UI_MODE = "high"  # Options: "high" or "low"
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/<your-username>/ai-story-image-generator-django.git
+cd ai-story-image-generator-django
