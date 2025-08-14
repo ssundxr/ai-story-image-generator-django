@@ -79,12 +79,9 @@ def result(request):
 ```
 
 
- Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging.
-
- Optional Upgrade: UI mode switching can also be made to work via a URL parameter (e.g., ?ui=high) so you don’t have to restart the server or change settings — perfect for demos.
+ **** Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging. ****
 
 
----
 
-Do you want me to now **add that optional URL-based UI switching code** into this README so it’s ready for demos without editing `settings.py`? That would make it even smoother.
+
 
