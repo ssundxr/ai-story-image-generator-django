@@ -9,6 +9,19 @@
 - **Error Handling** — Graceful fallbacks in case of API or image generation issues.
 
 ---
+HERE ARE SOME SAMPLE SCREEN SHOTS THAT RAN ON LOCAL HOST
+<!-- Row 1 -->
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/a7c64617-de94-4c2a-ad13-91e3d49a7b6c" width="48%" />
+  <img src="https://github.com/user-attachments/assets/90a55e1f-c5d1-4f65-819b-4fa7bfcb24c5" width="48%" />
+</p>
+
+<!-- Row 2 -->
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6f1be487-11d1-4dda-ae58-b3504f582d74" width="48%" />
+  <img src="https://github.com/user-attachments/assets/aafa99ba-6f80-4002-a5fe-f0ed1c25bcd1" width="48%" />
+</p>
+
 
 ##Installation & Setup
 
@@ -93,8 +106,5 @@ setup instructions:
 
  **** Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging. ****
 
-<img width="2870" height="1780" alt="Screenshot 2025-08-14 215943" src="https://github.com/user-attachments/assets/b33418bb-bb0e-4a89-8cdf-6b79773533a8" />
-
-
-
+HERE ARE SOME SAMPLE SCREEN SHOTS THAT RAN ON LOCAL HOST
 
