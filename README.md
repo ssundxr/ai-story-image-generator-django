@@ -58,3 +58,35 @@ Switch between UI modes (see below).
 Mode	Templates Used	Description
 High-Level UI/UX	mainapp/homeUIUX.html, mainapp/resultUIUX.html, mainapp/baseUIUX.html, static/css/style.css	Modern design with animations, gradients, and advanced CSS styling.
 Low-Level UI	mainapp/home.html, mainapp/result.html, mainapp/base.html	Minimal, fast-loading templates for quick testing and debugging.
+```
+🔄 Switching UI Modes
+
+In views.py, you can load templates dynamically based on a setting:
+
+# settings.py
+UI_MODE = "high"  # Options: "high" or "low"
+
+# views.py
+from django.conf import settings
+from django.shortcuts import render
+
+def home(request):
+    if settings.UI_MODE == "high":
+        return render(request, "mainapp/homeUIUX.html")
+    return render(request, "mainapp/home.html")
+
+def result(request):
+    if settings.UI_MODE == "high":
+        return render(request, "mainapp/resultUIUX.html")
+    return render(request, "mainapp/result.html")
+
+
+💡 Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging.
+
+✅ Optional Upgrade: UI mode switching can also be made to work via a URL parameter (e.g., ?ui=high) so you don’t have to restart the server or change settings — perfect for demos.
+
+
+---
+
+Do you want me to now **add that optional URL-based UI switching code** into this README so it’s ready for demos without editing `settings.py`? That would make it even smoother.
+
