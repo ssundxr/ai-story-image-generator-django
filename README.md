@@ -5,7 +5,7 @@
 - **Character & Background Descriptions** — Extracts rich details for image generation.
 - **Image Generation** — Uses **Pollinations AI** to generate relevant character and background visuals.
 - **Two UI Options** — Switch between a high-end polished UI and a lightweight basic layout.
-- **Fast & Responsive** — Works well across desktop and mobile.
+- **Fast & Responsive** — Works well across desktop.
 - **Error Handling** — Graceful fallbacks in case of API or image generation issues.
 
 ---
