@@ -1,6 +1,6 @@
 # AI Story + Image Generator (Django)
 
-✨ **Features**
+**Features**
 - **AI-powered Storytelling** — Generates a 2–3 paragraph creative story from your prompt using the **Perplexity API**.
 - **Character & Background Descriptions** — Extracts rich details for image generation.
 - **Image Generation** — Uses **Pollinations AI** to generate relevant character and background visuals.
@@ -10,35 +10,36 @@
 
 ---
 
-## 🚀 Installation & Setup
+##Installation & Setup
 
-### 1️⃣ Clone the Repository
+### 1️.Clone the Repository
 ```bash
 git clone https://github.com/<your-username>/ai-story-image-generator-django.git
 cd ai-story-image-generator-django
-2️⃣ Create Virtual Environment & Activate
-python -m venv venv
+```
+2️.Create Virtual Environment & Activate
+```python -m venv venv```
 # Windows
-venv\Scripts\activate
+```venv\Scripts\activate```
 # Mac/Linux
-source venv/bin/activate
+```source venv/bin/activate```
 
-3️⃣ Install Dependencies
-pip install -r requirements.txt
+3️.Install Dependencies
+```pip install -r requirements.txt```
 
-4️⃣ Create .env File
-PERPLEXITY_API_KEY=your_perplexity_api_key_here
+4️.Create .env File
+```PERPLEXITY_API_KEY=your_perplexity_api_key_here```
 
-5️⃣ Run Migrations
-python manage.py migrate
+5️.Run Migrations
+```python manage.py migrate```
 
-6️⃣ Start Server
-python manage.py runserver
+6️.Start Server
+```python manage.py runserver```
 
 
-Visit: http://127.0.0.1:8000
+```Visit: http://127.0.0.1:8000```
 
-💡 Usage
+Usage
 
 Open the app in your browser.
 
@@ -54,19 +55,18 @@ Background description + image
 
 Switch between UI modes (see below).
 
-🎨 UI Modes
+UI Modes
 Mode	Templates Used	Description
 High-Level UI/UX	mainapp/homeUIUX.html, mainapp/resultUIUX.html, mainapp/baseUIUX.html, static/css/style.css	Modern design with animations, gradients, and advanced CSS styling.
 Low-Level UI	mainapp/home.html, mainapp/result.html, mainapp/base.html	Minimal, fast-loading templates for quick testing and debugging.
-```
-🔄 Switching UI Modes
+
+
+Switching UI Modes
 
 In views.py, you can load templates dynamically based on a setting:
 
-# settings.py
-UI_MODE = "high"  # Options: "high" or "low"
-
 # views.py
+```
 from django.conf import settings
 from django.shortcuts import render
 
@@ -79,11 +79,12 @@ def result(request):
     if settings.UI_MODE == "high":
         return render(request, "mainapp/resultUIUX.html")
     return render(request, "mainapp/result.html")
+```
 
 
-💡 Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging.
+ Tip: Use High-Level UI for production and demos, and Low-Level UI for quick development and debugging.
 
-✅ Optional Upgrade: UI mode switching can also be made to work via a URL parameter (e.g., ?ui=high) so you don’t have to restart the server or change settings — perfect for demos.
+ Optional Upgrade: UI mode switching can also be made to work via a URL parameter (e.g., ?ui=high) so you don’t have to restart the server or change settings — perfect for demos.
 
 
 ---
