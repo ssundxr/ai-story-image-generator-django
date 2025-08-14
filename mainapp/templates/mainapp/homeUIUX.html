@@ -1,0 +1,350 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}Create Your Story - AI Story & Image Generator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-feather-alt me-3"></i>
+                    Create Your Story
+                </h2>
+                <p class="mb-0 mt-2" style="opacity: 0.9; font-size: 1.1rem;">
+                    Let AI bring your imagination to life with stories and stunning visuals
+                </p>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'generate_story' %}" id="story-form">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="prompt" class="form-label">
+                            <i class="fas fa-lightbulb me-2 text-warning"></i>
+                            Enter your story prompt:
+                        </label>
+                        <textarea 
+                            class="form-control" 
+                            id="prompt" 
+                            name="prompt" 
+                            rows="6" 
+                            placeholder="E.g., A brave knight discovers an ancient dragon sleeping in a crystal cave, but when their eyes meet, the knight realizes this dragon holds the key to saving their kingdom from an even greater evil..."
+                            required
+                        ></textarea>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1 text-info"></i>
+                            <strong>Pro tip:</strong> Be descriptive! Include characters, settings, emotions, and plot elements for richer stories and more accurate images.
+                        </div>
+                    </div>
+
+                    <!-- Story examples for inspiration -->
+                    <div class="mb-4">
+                        <h6 class="text-muted mb-3">
+                            <i class="fas fa-stars me-2"></i>
+                            Need inspiration? Try these examples:
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm w-100 example-btn" data-example="A young wizard discovers a hidden library where books come alive and their characters step out of the pages to help solve an ancient mystery.">
+                                    <i class="fas fa-book-open me-2"></i>
+                                    Fantasy Adventure
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm w-100 example-btn" data-example="In a cyberpunk city, a street artist finds that their graffiti murals predict the future, leading them on a dangerous journey to prevent a catastrophic event.">
+                                    <i class="fas fa-robot me-2"></i>
+                                    Sci-Fi Mystery
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm w-100 example-btn" data-example="A retired detective receives mysterious letters from their past cases, each revealing that the crimes were connected in ways they never imagined.">
+                                    <i class="fas fa-search me-2"></i>
+                                    Mystery Thriller
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary btn-sm w-100 example-btn" data-example="Two rivals from different magical schools must work together when their worlds collide during a supernatural storm that threatens both realms.">
+                                    <i class="fas fa-heart me-2"></i>
+                                    Romance Fantasy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>
+                            Generate Story & Images
+                        </button>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                Usually takes 10-30 seconds
+                            </small>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Enhanced Loading indicator -->
+                <div id="loading-spinner" class="loading-container" style="display: none;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="loading-text">
+                            <i class="fas fa-sparkles me-2"></i>
+                            <span id="loading-message">Crafting your magical story...</span>
+                        </div>
+                        <p class="text-muted mt-2">
+                            <i class="fas fa-palette me-1"></i>
+                            Creating characters and scenes
+                        </p>
+                        
+                        <!-- Progress bar for visual feedback -->
+                        <div class="progress mt-3" style="height: 8px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" 
+                                 style="width: 0%; background: linear-gradient(45deg, var(--primary-color), var(--accent-color));">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card mt-4 fade-in" style="animation-delay: 0.3s;">
+            <div class="card-body">
+                <h6 class="card-title text-primary">
+                    <i class="fas fa-tips me-2"></i>
+                    Tips for Better Stories
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Include specific character details
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Describe the setting vividly
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Add conflict or mystery
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                Mention emotions and motivations
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enhanced JavaScript functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('story-form');
+        const spinner = document.getElementById('loading-spinner');
+        const promptTextarea = document.getElementById('prompt');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const loadingMessage = document.getElementById('loading-message');
+        const progressBar = document.querySelector('.progress-bar');
+
+        // Example button functionality
+        const exampleButtons = document.querySelectorAll('.example-btn');
+        exampleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const example = this.getAttribute('data-example');
+                promptTextarea.value = example;
+                
+                // Visual feedback
+                this.classList.add('btn-primary');
+                this.classList.remove('btn-outline-secondary');
+                setTimeout(() => {
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-outline-secondary');
+                }, 1000);
+                
+                // Focus on textarea
+                promptTextarea.focus();
+            });
+        });
+
+        // Character counter
+        const maxLength = 1000;
+        const counterElement = document.createElement('div');
+        counterElement.className = 'form-text text-end';
+        counterElement.style.marginTop = '5px';
+        promptTextarea.parentNode.appendChild(counterElement);
+
+        function updateCounter() {
+            const length = promptTextarea.value.length;
+            counterElement.innerHTML = `${length}/${maxLength} characters`;
+            counterElement.style.color = length > maxLength * 0.9 ? 'var(--error-color)' : 'var(--text-secondary)';
+        }
+
+        promptTextarea.addEventListener('input', updateCounter);
+        updateCounter();
+
+        // Enhanced form submission with loading states
+        form.addEventListener('submit', function(e) {
+            const promptLength = promptTextarea.value.trim().length;
+            
+            if (promptLength < 20) {
+                e.preventDefault();
+                alert('Please write a more detailed prompt (at least 20 characters) for better results.');
+                promptTextarea.focus();
+                return;
+            }
+
+            // Hide form and show enhanced loading
+            form.style.display = 'none';
+            spinner.style.display = 'block';
+            
+            // Loading messages rotation
+            const messages = [
+                'Crafting your magical story...',
+                'Developing character personalities...',
+                'Creating vivid scene descriptions...',
+                'Generating stunning AI artwork...',
+                'Adding final creative touches...'
+            ];
+            
+            let messageIndex = 0;
+            const messageInterval = setInterval(() => {
+                messageIndex = (messageIndex + 1) % messages.length;
+                loadingMessage.textContent = messages[messageIndex];
+            }, 3000);
+
+            // Animated progress bar
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90; // Don't reach 100% until complete
+                progressBar.style.width = progress + '%';
+            }, 500);
+
+            // Store intervals for cleanup if needed
+            window.loadingIntervals = { messageInterval, progressInterval };
+        });
+
+        // Auto-resize textarea
+        function autoResize() {
+            promptTextarea.style.height = 'auto';
+            promptTextarea.style.height = Math.min(promptTextarea.scrollHeight, 200) + 'px';
+        }
+
+        promptTextarea.addEventListener('input', autoResize);
+        autoResize();
+
+        // Keyboard shortcuts
+        promptTextarea.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to submit
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                form.submit();
+            }
+        });
+
+        // Add focus styles
+        promptTextarea.addEventListener('focus', function() {
+            this.parentNode.style.transform = 'scale(1.02)';
+            this.parentNode.style.transition = 'transform 0.2s ease';
+        });
+
+        promptTextarea.addEventListener('blur', function() {
+            this.parentNode.style.transform = 'scale(1)';
+        });
+
+        // Save draft to localStorage
+        promptTextarea.addEventListener('input', function() {
+            localStorage.setItem('story-draft', this.value);
+        });
+
+        // Load draft on page load
+        const savedDraft = localStorage.getItem('story-draft');
+        if (savedDraft && promptTextarea.value.trim() === '') {
+            promptTextarea.value = savedDraft;
+            updateCounter();
+            autoResize();
+        }
+
+        // Clear draft after successful submission
+        form.addEventListener('submit', function() {
+            setTimeout(() => {
+                localStorage.removeItem('story-draft');
+            }, 1000);
+        });
+    });
+</script>
+
+<style>
+    /* Additional styles for enhanced features */
+    .example-btn {
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        text-align: left;
+        padding: 8px 12px;
+        font-size: 0.875rem;
+    }
+
+    .example-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .progress {
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: rgba(99, 102, 241, 0.1);
+    }
+
+    .card-body .form-text {
+        padding: 10px;
+        background: rgba(99, 102, 241, 0.05);
+        border-radius: 8px;
+        border-left: 3px solid var(--primary-color);
+        margin-top: 10px;
+    }
+
+    #prompt {
+        transition: all 0.3s ease;
+        line-height: 1.5;
+    }
+
+    #prompt:focus {
+        transform: scale(1.01);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .loading-container {
+        background: rgba(248, 250, 252, 0.9);
+        border-radius: 12px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 768px) {
+        .example-btn {
+            margin-bottom: 8px;
+        }
+        
+        .card-header .card-title {
+            font-size: 1.5rem;
+        }
+        
+        .card-header p {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

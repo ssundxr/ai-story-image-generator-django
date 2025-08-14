@@ -1,0 +1,520 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}Your Generated Story - AI Story & Image Generator{% endblock %}
+
+{% block content %}
+<div class="result-container">
+    <!-- Header Section -->
+    <div class="text-center mb-4">
+        <h2 class="display-6 text-white mb-3">
+            <i class="fas fa-book-open me-3"></i>
+            Your Generated Story
+        </h2>
+        <p class="text-white-50">
+            <i class="fas fa-sparkles me-2"></i>
+            Created with AI magic just for you
+        </p>
+    </div>
+
+    <!-- Prompt Display -->
+    <div class="alert alert-info slide-in mb-4">
+        <div class="d-flex align-items-start">
+            <i class="fas fa-quote-left fa-2x text-primary me-3 mt-1"></i>
+            <div>
+                <strong class="fs-5">Your Prompt:</strong>
+                <p class="mb-0 mt-2 fs-6 lh-base">{{ prompt }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story Section -->
+    <div class="story-section mb-4">
+        <div class="card fade-in">
+            <div class="card-header bg-gradient">
+                <h3 class="section-title mb-0 text-white">
+                    <i class="fas fa-scroll me-2"></i>
+                    Your Story
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="content-box story-content">
+                    {{ story|linebreaks }}
+                </div>
+                
+                <!-- Story Actions -->
+                <div class="story-actions mt-3">
+                    <button class="btn btn-outline-primary btn-sm me-2" onclick="copyToClipboard('{{ story|escapejs }}')">
+                        <i class="fas fa-copy me-1"></i>
+                        Copy Story
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="shareStory()">
+                        <i class="fas fa-share me-1"></i>
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character and Background Grid -->
+    <div class="row mb-4">
+        <!-- Character Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 fade-in" style="animation-delay: 0.2s;">
+                <div class="card-header bg-gradient-character">
+                    <h4 class="section-title mb-0 text-white">
+                        <i class="fas fa-user-circle me-2"></i>
+                        Character
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="content-box character-content">
+                        {{ character|safe|linebreaks }}
+                    </div>
+                    
+                    {% if character_image_url %}
+                    <div class="image-container mt-3">
+                        <div class="image-wrapper">
+                            <img src="{{ character_image_url }}" 
+                                 alt="Character Image" 
+                                 class="generated-image"
+                                 loading="lazy"
+                                 onclick="openImageModal(this)">
+                            <div class="image-overlay">
+                                <button class="btn btn-light btn-sm" onclick="downloadImage('{{ character_image_url }}', 'character.jpg')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-light btn-sm ms-2" onclick="openImageModal(this.parentElement.previousElementSibling)">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Click to enlarge
+                        </small>
+                    </div>
+                    {% else %}
+                    <div class="no-image-placeholder">
+                        <i class="fas fa-user-slash fa-3x text-muted mb-2"></i>
+                        <p class="text-muted">Character image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Background Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 fade-in" style="animation-delay: 0.4s;">
+                <div class="card-header bg-gradient-background">
+                    <h4 class="section-title mb-0 text-white">
+                        <i class="fas fa-mountain me-2"></i>
+                        Background
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="content-box background-content">
+                        {{ background|safe|linebreaks }}
+                    </div>
+                    
+                    {% if background_image_url %}
+                    <div class="image-container mt-3">
+                        <div class="image-wrapper">
+                            <img src="{{ background_image_url }}" 
+                                 alt="Background Image" 
+                                 class="generated-image"
+                                 loading="lazy"
+                                 onclick="openImageModal(this)">
+                            <div class="image-overlay">
+                                <button class="btn btn-light btn-sm" onclick="downloadImage('{{ background_image_url }}', 'background.jpg')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="btn btn-light btn-sm ms-2" onclick="openImageModal(this.parentElement.previousElementSibling)">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Click to enlarge
+                        </small>
+                    </div>
+                    {% else %}
+                    <div class="no-image-placeholder">
+                        <i class="fas fa-image-slash fa-3x text-muted mb-2"></i>
+                        <p class="text-muted">Background image not available</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mb-4">
+        <div class="action-buttons">
+            <a href="{% url 'home' %}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-plus me-2"></i>
+                Create Another Story
+            </a>
+            <button class="btn btn-success btn-lg me-3" onclick="saveStory()">
+                <i class="fas fa-save me-2"></i>
+                Save Story
+            </button>
+            <button class="btn btn-info btn-lg" onclick="exportStory()">
+                <i class="fas fa-file-export me-2"></i>
+                Export as PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="card fade-in stats-card" style="animation-delay: 0.6s;">
+        <div class="card-body text-center">
+            <h6 class="card-title text-muted mb-3">
+                <i class="fas fa-chart-line me-2"></i>
+                Story Statistics
+            </h6>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <i class="fas fa-align-left text-primary fa-2x mb-2"></i>
+                        <h5 class="mb-1" id="word-count">-</h5>
+                        <small class="text-muted">Words</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <i class="fas fa-clock text-warning fa-2x mb-2"></i>
+                        <h5 class="mb-1" id="read-time">-</h5>
+                        <small class="text-muted">Min Read</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-item">
+                        <i class="fas fa-star text-success fa-2x mb-2"></i>
+                        <h5 class="mb-1">AI</h5>
+                        <small class="text-muted">Generated</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Preview" class="img-fluid rounded">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="downloadModalImage()">
+                    <i class="fas fa-download me-1"></i>
+                    Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calculate and display story statistics
+    calculateStats();
+    
+    // Add scroll animations
+    observeElements();
+    
+    // Initialize tooltips
+    initializeTooltips();
+});
+
+function calculateStats() {
+    const storyText = document.querySelector('.story-content').textContent || '';
+    const wordCount = storyText.trim().split(/\s+/).filter(word => word.length > 0).length;
+    const readTime = Math.max(1, Math.ceil(wordCount / 200)); // Average reading speed
+    
+    document.getElementById('word-count').textContent = wordCount;
+    document.getElementById('read-time').textContent = readTime;
+}
+
+function copyToClipboard(text) {
+    // Clean up the text
+    const cleanText = text.replace(/\\n/g, '\n').replace(/\\'/g, "'").replace(/\\"/g, '"');
+    
+    navigator.clipboard.writeText(cleanText).then(function() {
+        showToast('Story copied to clipboard!', 'success');
+    }).catch(function(err) {
+        showToast('Failed to copy. Please select and copy manually.', 'error');
+    });
+}
+
+function shareStory() {
+    if (navigator.share) {
+        const storyText = document.querySelector('.story-content').textContent || '';
+        navigator.share({
+            title: 'Check out this AI-generated story!',
+            text: storyText.substring(0, 100) + '...',
+            url: window.location.href
+        });
+    } else {
+        copyToClipboard(document.querySelector('.story-content').textContent || '');
+        showToast('Story copied! You can now paste it anywhere to share.', 'info');
+    }
+}
+
+function saveStory() {
+    const storyData = {
+        prompt: '{{ prompt|escapejs }}',
+        story: document.querySelector('.story-content').textContent || '',
+        character: document.querySelector('.character-content').textContent || '',
+        background: document.querySelector('.background-content').textContent || '',
+        timestamp: new Date().toISOString()
+    };
+    
+    const savedStories = JSON.parse(localStorage.getItem('savedStories') || '[]');
+    savedStories.push(storyData);
+    localStorage.setItem('savedStories', JSON.stringify(savedStories));
+    
+    showToast('Story saved to your device!', 'success');
+}
+
+function exportStory() {
+    // Simple text export - in a real app, you'd use a PDF library
+    const content = `
+AI GENERATED STORY
+==================
+
+PROMPT: {{ prompt }}
+
+STORY:
+${document.querySelector('.story-content').textContent || ''}
+
+CHARACTER:
+${document.querySelector('.character-content').textContent || ''}
+
+BACKGROUND:
+${document.querySelector('.background-content').textContent || ''}
+
+Generated at: ${new Date().toLocaleString()}
+    `.trim();
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ai-story-' + Date.now() + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast('Story exported as text file!', 'success');
+}
+
+function openImageModal(img) {
+    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    const modalImage = document.getElementById('modalImage');
+    modalImage.src = img.src;
+    modalImage.alt = img.alt;
+    modal.show();
+}
+
+function downloadImage(url, filename) {
+    if (url.startsWith('data:')) {
+        // Handle base64 images
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+    } else {
+        // Handle URL images
+        fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.click();
+                URL.revokeObjectURL(url);
+            })
+            .catch(() => {
+                showToast('Unable to download image. Please right-click and save.', 'warning');
+            });
+    }
+}
+
+function downloadModalImage() {
+    const modalImage = document.getElementById('modalImage');
+    downloadImage(modalImage.src, 'ai-generated-image.jpg');
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : type} position-fixed top-0 end-0 m-3`;
+    toast.style.zIndex = '9999';
+    toast.style.minWidth = '300px';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info'}-circle me-2"></i>
+        ${message}
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+}
+
+function observeElements() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
+    
+    document.querySelectorAll('.fade-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+}
+
+function initializeTooltips() {
+    // Initialize Bootstrap tooltips if available
+    if (window.bootstrap && bootstrap.Tooltip) {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+}
+</script>
+
+<style>
+/* Additional styles for enhanced result page */
+.bg-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+}
+
+.bg-gradient-character {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+.bg-gradient-background {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+}
+
+.story-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.character-content, .background-content {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.image-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.no-image-placeholder {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.stats-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.stat-item {
+    padding: 15px;
+}
+
+.story-actions {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.action-buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 5px 0;
+    }
+    
+    .display-6 {
+        font-size: 2rem;
+    }
+    
+    .image-overlay {
+        opacity: 1; /* Always show on mobile */
+    }
+}
+
+/* Improved image styling */
+.generated-image {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.generated-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Enhanced card headers */
+.card-header h3, .card-header h4 {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Smooth transitions for all interactive elements */
+.btn, .card, .image-wrapper {
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}

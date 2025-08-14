@@ -1,0 +1,40 @@
+{% extends 'mainapp/base.html' %}
+{% block content %}
+<div class="container my-4" style="max-width: 800px;">
+  <h3>Your Generated Story</h3>
+  <div class="alert alert-info">
+    <strong>Prompt:</strong> {{ prompt }}
+  </div>
+  <section class="mb-4">
+    <h5>Story</h5>
+    <div class="border rounded p-3" style="background:#f8f9fa;">
+      {{ story|linebreaks }}
+    </div>
+  </section>
+  <section class="mb-4">
+    <h5>Character Description</h5>
+    <div class="border rounded p-3" style="background:#fefefe;">
+      {{ character|safe|linebreaks }}
+    </div>
+  </section>
+  <section class="mb-4">
+    <h5>Background Description</h5>
+    <div class="border rounded p-3" style="background:#fefefe;">
+      {{ background|safe|linebreaks }}
+    </div>
+  </section>
+  {% if character_image_url %}
+  <section class="mb-4">
+    <h5>Character Image</h5>
+    <img src="{{ character_image_url }}" alt="Character Image" class="img-fluid rounded shadow-sm">
+  </section>
+  {% endif %}
+  {% if background_image_url %}
+  <section class="mb-4">
+    <h5>Background Image</h5>
+    <img src="{{ background_image_url }}" alt="Background Image" class="img-fluid rounded shadow-sm">
+  </section>
+  {% endif %}
+  <a href="{% url 'home' %}" class="btn btn-secondary mt-3">Generate Another Story</a>
+</div>
+{% endblock %}

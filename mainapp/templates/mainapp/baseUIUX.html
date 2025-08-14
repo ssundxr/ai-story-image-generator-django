@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI Story & Image Generator{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== Enhanced Custom CSS ========== */
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #f8fafc;
+            --accent-color: #ec4899;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --border-color: #e2e8f0;
+            --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Main Header Styling */
+        .main-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        /* Card Styling */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-heavy);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border-bottom: none;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Enhancements */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            transition: var(--transition);
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .form-text {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+
+        /* Button Styling */
+        .btn {
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-heavy);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--text-secondary), #475569);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #475569, var(--text-secondary));
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-lg {
+            padding: 18px 35px;
+            font-size: 1.2rem;
+        }
+
+        /* Loading Spinner */
+        .loading-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 4px;
+            border-color: var(--primary-color);
+            border-right-color: transparent;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Results Page Styling */
+        .result-container {
+            margin-top: 30px;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .story-section, .description-section, .image-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .content-box {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .content-box:hover {
+            background: rgba(248, 250, 252, 1);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Image Styling */
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .generated-image, .img-fluid {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: var(--shadow-heavy);
+            transition: var(--transition);
+            border: 3px solid white;
+        }
+
+        .generated-image:hover, .img-fluid:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px 0;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+            
+            .main-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+            
+            .form-control {
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .content-box {
+                padding: 20px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Additional utility classes */
+        .text-white {
+            color: white !important;
+        }
+
+        .display-6 {
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="main-header">
+            <h1>
+                <i class="fas fa-magic me-3"></i>
+                AI Story & Image Generator
+            </h1>
+            <p>Transform your imagination into captivating stories with AI-powered creativity</p>
+        </div>
+        
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Add fade-in animation to elements when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.card, .content-box, .generated-image, .img-fluid');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('fade-in');
+                }, index * 100); // Stagger animations
+            });
+
+            // Add smooth scroll behavior
+            document.documentElement.style.scrollBehavior = 'smooth';
+
+            // Enhanced form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const textarea = form.querySelector('textarea[required]');
+                    if (textarea && textarea.value.trim().length < 10) {
+                        e.preventDefault();
+                        alert('Please enter a more detailed prompt (at least 10 characters)');
+                        textarea.focus();
+                        return false;
+                    }
+                });
+            });
+
+            // Add loading state to buttons
+            const submitButtons = document.querySelectorAll('button[type="submit"]');
+            submitButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    if (form && form.checkValidity()) {
+                        // Add loading state
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
+                        this.disabled = true;
+                    }
+                });
+            });
+        });
+
+        // Image lazy loading and error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
+                    const fallback = document.createElement('div');
+                    fallback.className = 'alert alert-warning text-center';
+                    fallback.innerHTML = '<i class="fas fa-image me-2"></i>Image could not be loaded';
+                    this.parentNode.appendChild(fallback);
+                });
+
+                img.addEventListener('load', function() {
+                    this.classList.add('fade-in');
+                });
+            });
+        });
+
+        // Add copy functionality for generated content
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = '<i class="fas fa-check me-2"></i>Copied to clipboard!';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const form = document.querySelector('form');
+                if (form) {
+                    form.submit();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
