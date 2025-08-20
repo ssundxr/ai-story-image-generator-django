@@ -1,3 +1,12 @@
+Django==5.2.5
+gunicorn==21.2.0
+whitenoise==6.6.0
+psycopg2-binary==2.9.7
+dj-database-url==2.1.0
+python-dotenv==1.0.0
+Pillow==11.3.0
+requests==2.31.0
+# Add your other existing dependencies here
 annotated-types==0.7.0
 anyio==4.10.0
 asgiref==3.9.1
@@ -51,3 +60,4 @@ tzdata==2025.2
 urllib3==2.5.0
 whitenoise==6.6.0
 zstandard==0.23.0
+
